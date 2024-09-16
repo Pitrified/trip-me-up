@@ -4,6 +4,10 @@ credential.py
 .env
 secrets/
 
+# data
+cache/
+
+
 # ide
 .vscode/
 
