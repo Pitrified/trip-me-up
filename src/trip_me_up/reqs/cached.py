@@ -34,7 +34,7 @@ def req_get_cached(
     response.raise_for_status()
     # get the json content
     data = response.json()
-    # cache the content if valid
-    if validator is not None and validator(data):
+    # cache the content if valid or if no validator is provided
+    if validator is None or (validator is not None and validator(data)):
         cache_fp.write_text(json.dumps(data, indent=2))
     return data
