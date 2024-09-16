@@ -15,6 +15,9 @@ requests = "^2.32.3"
 langchain = "^0.2.6"
 langchain-chroma = "^0.1.1"
 
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
