@@ -6,6 +6,9 @@ secrets/
 
 # data
 cache/
+data/
+*.csv
+*.json
 
 
 # ide

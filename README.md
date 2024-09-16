@@ -25,3 +25,9 @@ poetry install
 1. Compute the distance between each pair of neighborhoods
 1. Plan the trip
 1. Chat with the user to get feedback
+
+## Google takeout
+
+1. Go to the [Google takeout page](https://takeout.google.com/settings/takeout?pli=1)
+1. Select "Save" ("Salvato" in Italian)
+1. Download the csv files
