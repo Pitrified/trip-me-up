@@ -52,10 +52,15 @@ class FindPlace:
     @staticmethod
     def is_place_id_resp_valid(data: Any) -> bool:
         """Check if the response from the Google Places API is valid."""
-        if data["status"] != "OK":
-            lg.warning(f"Status not OK. {data}")
-            return False
-        return True
+        match data["status"]:
+            case "OK":
+                return True
+            case "ZERO_RESULTS":
+                lg.warning(f"No results found. {data}")
+                return True
+            case _:
+                lg.warning(f"Status not OK. {data}")
+                return False
 
 
 @dataclass
@@ -148,5 +153,22 @@ class PlaceDetails:
             api_key=self.api_key,
         )
         # get the data
-        data = req_get_cached(url_place_details, PLACE_DETAILS_CACHE_FOL)
+        data = req_get_cached(
+            url_place_details,
+            PLACE_DETAILS_CACHE_FOL,
+            validator=self.is_place_details_resp_valid,
+        )
         return data
+
+    @staticmethod
+    def is_place_details_resp_valid(data: Any) -> bool:
+        """Check if the response from the Google Places API is valid."""
+        match data["status"]:
+            case "OK":
+                return True
+            case "ZERO_RESULTS":
+                lg.warning(f"No results found. {data}")
+                return True
+            case _:
+                lg.warning(f"Status not OK. {data}")
+                return False
