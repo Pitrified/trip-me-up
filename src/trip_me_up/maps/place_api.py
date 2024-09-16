@@ -2,6 +2,8 @@
 
 from typing import Any
 
+from loguru import logger as lg
+
 from trip_me_up.config.constants import FIND_PLACE_CACHE_FOL
 from trip_me_up.reqs.cached import req_get_cached
 from trip_me_up.reqs.utils import escape_input_text
@@ -34,10 +36,22 @@ class FindPlace:
             api_key=self.api_key,
         )
         # get the data
-        data = req_get_cached(url_find_place, FIND_PLACE_CACHE_FOL)
+        data = req_get_cached(
+            url_find_place,
+            FIND_PLACE_CACHE_FOL,
+            validator=self.is_place_id_resp_valid,
+        )
         # extract the place_id if it exists
         candidates = data["candidates"]
         if len(candidates) == 0:
             return None
         place_id = candidates[0]["place_id"]
         return place_id
+
+    @staticmethod
+    def is_place_id_resp_valid(data: Any) -> bool:
+        """Check if the response from the Google Places API is valid."""
+        if data["status"] != "OK":
+            lg.warning(f"Status not OK. {data}")
+            return False
+        return True

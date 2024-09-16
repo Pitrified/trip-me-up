@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import requests
 
@@ -15,6 +15,7 @@ def req_get_cached(
     cache_fol: Path,
     cache_fn: str | None = None,
     force_update: bool = False,
+    validator: Callable[[Any], bool] | None = None,
 ) -> Any:
     """Get the content of a URL as json, caching it."""
     # create the cache folder if it does not exist
@@ -33,6 +34,7 @@ def req_get_cached(
     response.raise_for_status()
     # get the json content
     data = response.json()
-    # cache the content
-    cache_fp.write_text(json.dumps(data, indent=2))
+    # cache the content if valid
+    if validator is not None and validator(data):
+        cache_fp.write_text(json.dumps(data, indent=2))
     return data
