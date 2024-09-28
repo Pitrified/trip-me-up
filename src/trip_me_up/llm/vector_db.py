@@ -1,7 +1,5 @@
 """Custom vector db."""
 
-import hashlib
-import json
 from typing import Any
 
 from langchain_chroma import Chroma
@@ -64,7 +62,7 @@ class VectorDB(Chroma):
         known_ids_data = self.get(ids=ids, include=[])
         known_ids: list[str] = known_ids_data["ids"]
         # filter and keep only the new ids and documents
-        new_ids = set(doc_id for doc_id in ids if doc_id not in known_ids)
+        new_ids = [doc_id for doc_id in ids if doc_id not in known_ids]
         new_docs = [doc for doc, doc_id in zip(documents, ids) if doc_id in new_ids]
         # if there are no new documents, return an empty list
         if len(new_ids) == 0:
